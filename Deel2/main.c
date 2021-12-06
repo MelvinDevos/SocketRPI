@@ -105,11 +105,13 @@ void setHttpHeader(char httpHeader[])
                     switch (pin_list[index].type)
                     {
                     case INPUT:
-                        sprintf(buff, "<li class=\"input\"><i>GPIO %d:</i><small>%d</small></li>", pin_list[index].gpio_number, digitalRead(pin_list[index].gpio_number), i);
+                        sprintf(buff, "<li class=\"input\"><i>GPIO %d:</i><small>%d</small></li>",
+                                pin_list[index].gpio_number, digitalRead(pin_list[index].gpio_number), i);
                         break;
 
                     case OUTPUT:
-                        sprintf(buff, "<li class=\"output\"><i>GPIO %d: %d</i><small>%d</small></li>", pin_list[index].gpio_number, digitalRead(pin_list[index].gpio_number), i);
+                        sprintf(buff, "<li class=\"output\"><i>GPIO %d: %d</i><small>%d</small></li>",
+                                pin_list[index].gpio_number, digitalRead(pin_list[index].gpio_number), i);
                         break;
                     }
                 }
@@ -159,7 +161,6 @@ void setHttpHeader(char httpHeader[])
             strcat(responseData, line);
         }
     }
-    // char httpHeader[8000] = "HTTP/1.1 200 OK\r\n\n";
     strcat(httpHeader, responseData);
 }
 

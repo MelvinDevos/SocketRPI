@@ -76,7 +76,6 @@ void process1()
 }
 void process2()
 {
-    // pthread_mutex_lock(&lock);
     wiringPiSetupGpio();
 
     while (1)
@@ -87,7 +86,6 @@ void process2()
             int last_index = pin_list_lenght - 1;
             for (int i = 0; i <= last_index; i++)
             {
-                //printf("Last toggle: %d, periode: %d, now: %d\n", pin_list[i].last_toggle, pin_list[i].period, millis());
                 if (pin_list[i].last_toggle + pin_list[i].period < millis())
                 {
                     pinMode(pin_list[i].io_number, OUTPUT);
@@ -104,20 +102,12 @@ void process2()
             }
         }
     }
-
-    // pthread_mutex_unlock(&lock);
 }
 
 int main(void)
 {
     int err;
     pthread_t t1, t2;
-
-    if (pthread_mutex_init(&lock, NULL) != 0)
-    {
-        printf("Mutex initialization failed.\n");
-        return 1;
-    }
 
     pthread_create(&t1, NULL, process1, NULL);
     pthread_create(&t2, NULL, process2, NULL);
