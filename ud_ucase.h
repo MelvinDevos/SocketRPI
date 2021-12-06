@@ -40,6 +40,7 @@ struct
    int io_number;
    int period;
    int last_toggle;
+   int level;
 } typedef Rpi_pin;
 
 int is_duplicate(Rpi_pin *p, Rpi_pin a, int *num_items)

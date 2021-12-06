@@ -51,18 +51,21 @@ int main(int argc, char *argv[])
 
     /* Send messages to server; echo responses on stdout */
 
-    Rpi_pin data = {atoi(argv[1]), atoi(argv[2]), 0};
+    Rpi_pin data = {atoi(argv[1]), atoi(argv[2]), 0, 0};
     if (sendto(sfd, &data, sizeof(data), 0, (struct sockaddr *)&svaddr,
                sizeof(struct sockaddr_un)) != sizeof(data))
         fatal("sendto");
-
-    Rpi_pin response;
-    numBytes = recvfrom(sfd, &response, sizeof(response), 0, NULL, NULL);
-    /* Or equivalently: numBytes = recv(sfd, resp, BUF_SIZE, 0);
+        
+    while (1)
+    {
+        Rpi_pin response;
+        numBytes = recvfrom(sfd, &response, sizeof(response), 0, NULL, NULL);
+        /* Or equivalently: numBytes = recv(sfd, resp, BUF_SIZE, 0);
                     or: numBytes = read(sfd, resp, BUF_SIZE); */
-    if (numBytes == -1)
-        errExit("recvfrom");
-    printf("\nResponse %d: %d\n", response.io_number, response.period);
+        if (numBytes == -1)
+            errExit("recvfrom");
+        printf("Received IO: %zd: periode %zdms, status: %d\n", response.io_number, response.period, response.level);
+    }
 
     remove(claddr.sun_path); /* Remove client socket pathname */
     exit(EXIT_SUCCESS);

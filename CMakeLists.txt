@@ -20,6 +20,10 @@ add_executable(Server ud_ucase_sv.c)
 add_executable(Test test.c)
 
 
+TARGET_LINK_LIBRARIES( Server
+pthread
+)
+
 TARGET_LINK_LIBRARIES( Test
 pthread
 )

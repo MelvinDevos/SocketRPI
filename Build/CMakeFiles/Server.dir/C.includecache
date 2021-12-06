@@ -17,6 +17,14 @@ tlpi_hdr.h
 /home/pi/embedded/SocketRPI/tlpi_hdr.h
 
 /home/pi/embedded/SocketRPI/ud_ucase_sv.c
+pthread.h
+-
+unistd.h
+-
+stdio.h
+-
 ud_ucase.h
 /home/pi/embedded/SocketRPI/ud_ucase.h
+wiringPi.h
+-
 

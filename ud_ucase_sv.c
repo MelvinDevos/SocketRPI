@@ -1,33 +1,22 @@
-/*************************************************************************\
-*                  Copyright (C) Michael Kerrisk, 2020.                   *
-*                                                                         *
-* This program is free software. You may use, modify, and redistribute it *
-* under the terms of the GNU General Public License as published by the   *
-* Free Software Foundation, either version 3 or (at your option) any      *
-* later version. This program is distributed without any warranty.  See   *
-* the file COPYING.gpl-v3 for details.                                    *
-\*************************************************************************/
-
-/* Listing 57-6 */
-
-/* ud_ucase_sv.c
-
-   A server that uses a UNIX domain datagram socket to receive datagrams,
-   convert their contents to uppercase, and then return them to the senders.
-
-   See also ud_ucase_cl.c.
-*/
+#include <pthread.h>
+#include <unistd.h>
+#include <stdio.h>
 #include "ud_ucase.h"
+#include <wiringPi.h>
 
-int main(int argc, char *argv[])
+pthread_mutex_t lock;
+Rpi_pin pin_list[MAX_ITEMS];
+int pin_list_lenght = 0;
+
+struct sockaddr_un svaddr, claddr;
+int sfd, j;
+ssize_t numBytes;
+socklen_t len;
+char buf[BUF_SIZE];
+
+void process1()
 {
-    struct sockaddr_un svaddr, claddr;
-    int sfd, j;
-    ssize_t numBytes;
-    socklen_t len;
-    char buf[BUF_SIZE];
-    Rpi_pin pin_list[MAX_ITEMS];
-    int pin_list_lenght = 0;
+    // pthread_mutex_lock(&lock);
 
     sfd = socket(AF_UNIX, SOCK_DGRAM, 0); /* Create server socket */
     if (sfd == -1)
@@ -62,8 +51,7 @@ int main(int argc, char *argv[])
         if (numBytes == -1)
             errExit("recvfrom");
 
-        printf("test\n\n");
-        printf("Received IO: %zd: periode %zdms\n", received_data.io_number, received_data.period);
+        printf("Received IO: %zd: periode %zdms, status: %d\n", received_data.io_number, received_data.period, received_data.level);
         /*FIXME: above: should use %zd here, and remove (long) cast */
 
         // add received data to pin_list
@@ -84,4 +72,58 @@ int main(int argc, char *argv[])
             numBytes)
             fatal("sendto");
     }
+    // pthread_mutex_unlock(&lock);
+}
+void process2()
+{
+    // pthread_mutex_lock(&lock);
+    wiringPiSetupGpio();
+
+    while (1)
+    {
+
+        if (pin_list_lenght > 0)
+        {
+            int last_index = pin_list_lenght - 1;
+            for (int i = 0; i <= last_index; i++)
+            {
+                //printf("Last toggle: %d, periode: %d, now: %d\n", pin_list[i].last_toggle, pin_list[i].period, millis());
+                if (pin_list[i].last_toggle + pin_list[i].period < millis())
+                {
+                    pinMode(pin_list[i].io_number, OUTPUT);
+                    printf("GPIO: %d aansturen, periode %d\n", pin_list[i].io_number, pin_list[i].period);
+                    pin_list[i].last_toggle = millis();
+                    int next_status = !digitalRead(pin_list[i].io_number);
+                    digitalWrite(pin_list[i].io_number, next_status);
+                    pin_list[i].level = next_status;
+
+                    if (sendto(sfd, &pin_list[i], sizeof(pin_list[i]), 0, (struct sockaddr *)&claddr, len) !=
+                        numBytes)
+                        fatal("sendto");
+                }
+            }
+        }
+    }
+
+    // pthread_mutex_unlock(&lock);
+}
+
+int main(void)
+{
+    int err;
+    pthread_t t1, t2;
+
+    if (pthread_mutex_init(&lock, NULL) != 0)
+    {
+        printf("Mutex initialization failed.\n");
+        return 1;
+    }
+
+    pthread_create(&t1, NULL, process1, NULL);
+    pthread_create(&t2, NULL, process2, NULL);
+
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    return 0;
 }

@@ -46,7 +46,6 @@
 #include <wiringPi.h>
 
 pthread_mutex_t lock;
-int j;
 Rpi_pin pin_list[MAX_ITEMS];
 int pin_list_lenght = 0;
 
@@ -154,8 +153,6 @@ int main(void)
         printf("Mutex initialization failed.\n");
         return 1;
     }
-
-    j = 0;
 
     pthread_create(&t1, NULL, process1, NULL);
     pthread_create(&t2, NULL, process2, NULL);
