@@ -1,1 +1,1 @@
-/usr/bin/cc    CMakeFiles/Test.dir/test.c.o  -o Test  -Wl,-Bstatic -ltlpi -Wl,-Bdynamic -lPJ_RPI /usr/lib/libwiringPi.so 
+/usr/bin/cc    CMakeFiles/Test.dir/test.c.o  -o Test  -Wl,-Bstatic -ltlpi -Wl,-Bdynamic -lPJ_RPI /usr/lib/libwiringPi.so -lpthread 

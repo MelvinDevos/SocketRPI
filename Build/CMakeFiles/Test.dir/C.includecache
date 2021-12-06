@@ -7,14 +7,16 @@
 #IncludeRegexTransform: 
 
 /home/pi/embedded/SocketRPI/test.c
+pthread.h
+-
+unistd.h
+-
 stdio.h
--
-time.h
--
-wiringPi.h
 -
 ud_ucase.h
 /home/pi/embedded/SocketRPI/ud_ucase.h
+wiringPi.h
+-
 
 /home/pi/embedded/SocketRPI/ud_ucase.h
 sys/un.h

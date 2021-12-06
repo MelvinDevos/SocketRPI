@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
         if (numBytes == -1)
             errExit("recvfrom");
 
+        printf("test\n\n");
         printf("Received IO: %zd: periode %zdms\n", received_data.io_number, received_data.period);
         /*FIXME: above: should use %zd here, and remove (long) cast */
 
