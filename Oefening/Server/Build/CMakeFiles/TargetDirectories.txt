@@ -1,3 +1,0 @@
-/home/pi/embedded/SocketRPI/Oefening/Build/CMakeFiles/rebuild_cache.dir
-/home/pi/embedded/SocketRPI/Oefening/Build/CMakeFiles/SocketRPI.dir
-/home/pi/embedded/SocketRPI/Oefening/Build/CMakeFiles/edit_cache.dir

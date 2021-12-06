@@ -1,1 +1,0 @@
-/usr/bin/cc   -rdynamic CMakeFiles/SocketRPI.dir/main.c.o  -o SocketRPI  -lPJ_RPI 

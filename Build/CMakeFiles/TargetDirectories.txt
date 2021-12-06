@@ -1,0 +1,5 @@
+/home/pi/embedded/SocketRPI/Build/CMakeFiles/rebuild_cache.dir
+/home/pi/embedded/SocketRPI/Build/CMakeFiles/edit_cache.dir
+/home/pi/embedded/SocketRPI/Build/CMakeFiles/Test.dir
+/home/pi/embedded/SocketRPI/Build/CMakeFiles/Client.dir
+/home/pi/embedded/SocketRPI/Build/CMakeFiles/Server.dir
